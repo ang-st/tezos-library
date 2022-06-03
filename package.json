@@ -1,0 +1,28 @@
+{
+  "name": "tezos-library",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test:unit": "nyc mocha 'src/**/*.spec.js'"
+  },
+  "author": "Digital Exchange",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0",
+    "nyc": "^15.1.0",
+    "sinon": "^14.0.0",
+    "sinon-chai": "^3.7.0"
+  },
+  "dependencies": {
+    "@taquito/local-forging": "^12.1.1",
+    "@taquito/signer": "^12.1.1",
+    "@taquito/utils": "^12.1.1",
+    "axios": "^0.27.2",
+    "bignumber.js": "^9.0.2",
+    "bip32": "^3.0.1",
+    "bip39": "^3.0.4",
+    "ed25519-hd-key": "^1.2.0"
+  }
+}
