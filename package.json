@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "npm run test:unit",
     "test:unit": "nyc mocha 'src/**/*.spec.js'"
   },
   "author": "Digital Exchange",

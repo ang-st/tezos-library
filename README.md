@@ -6,7 +6,7 @@ It provide specific EAZY integration
 
 **Features:**  
 
-- [] Pricer API support   
+- [X] Pricer API support   
 - [] Payment API support    
 - [] Chain API support  
     - [X] getNonce  
