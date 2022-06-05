@@ -4,6 +4,13 @@ It also provide support up to FA1.2/2.0 balance fetching and ledger access.
 It provide specific EAZY integration  
 
 
+
+## Wallet 
+
+Will generate a new seed and mnemonic when initiated without any mnemonic or seed parameters. 
+This mnemonic will only be exportable once (at first initialization) via the `.exportMnemonic` method.
+
+
 **Features:**  
 
 - [X] Pricer API support   
