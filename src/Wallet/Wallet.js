@@ -3,6 +3,7 @@ const Signer = require('@taquito/signer');
 const LocalForging = require('@taquito/local-forging');
 const LocalForger = require("@taquito/local-forging");
 const bip39 = require("bip39");
+const CONSTANTS = require('../CONSTANTS');
 const TYPED_WALLET = {
     'tz1': require('./TZ1Wallet/TZ1Wallet'),
     'tz2': require('./TZ2Wallet/TZ2Wallet')
@@ -64,9 +65,8 @@ class Wallet {
                 kind: 'reveal',
                 source: transaction.source,
                 counter: String(transaction.counter),
-                fee: '1270',
-                //https://github.com/Cryptonomic/ConseilJS/blob/e07b020ec79615bd052b1cbb764ccc71bb8e0b72/src/types/tezos/TezosConstants.ts
-                gas_limit: '1100',
+                fee: CONSTANTS.OPERATIONS.REVEAL.FEES,
+                gas_limit: CONSTANTS.OPERATIONS.REVEAL.GAS_LIMIT,
                 storage_limit: 0,
                 public_key: publicKey,
             }
@@ -87,8 +87,8 @@ class Wallet {
             source: from,
             // Tez to Mutez
             fee: String(fees*1e6),
-            gas_limit: '10600',
-            storage_limit: '496',
+            gas_limit: CONSTANTS.TRANSACTIONS.GAS_LIMIT,
+            storage_limit: CONSTANTS.TRANSACTIONS.STORAGE_LIMIT,
             destination: to,
             // Tez to Mutez
             amount: String(amount*1e6),
