@@ -3,6 +3,7 @@ const Signer = require('@taquito/signer');
 const LocalForging = require('@taquito/local-forging');
 const LocalForger = require("@taquito/local-forging");
 const bip39 = require("bip39");
+const tezToMutez = require('../utils/tezToMutez');
 const CONSTANTS = require('../CONSTANTS');
 const TYPED_WALLET = {
     'tz1': require('./TZ1Wallet/TZ1Wallet'),
@@ -52,12 +53,12 @@ class Wallet {
             publicKey
         };
     }
-    async signTransaction(transaction){
-        const privateKey = await this.wallet.getPrivateKey();
-        const publicKey = await this.wallet.getPublicKey();
+    async signTransaction(transaction, opts = {}){
+        const privateKey = opts.privateKey;
+        const publicKey = opts.publicKey;
         const signer = await new Signer.InMemorySigner(privateKey);
-        const {hash: branch} = await this.getBlockHead()
-        const isRevealed = await this.isRevealed()
+        const hash = (opts.hash) ? opts.hash : await this.explorer.getBlockHead()
+        const isRevealed = await this.explorer.isAddressRevealed(transaction.source)
 
         const contents = [];
         if(!isRevealed){
@@ -65,8 +66,8 @@ class Wallet {
                 kind: 'reveal',
                 source: transaction.source,
                 counter: String(transaction.counter),
-                fee: CONSTANTS.OPERATIONS.REVEAL.FEES,
-                gas_limit: CONSTANTS.OPERATIONS.REVEAL.GAS_LIMIT,
+                fee: CONSTANTS.OPERATIONS.REVEAL.FEES.DEFAULT,
+                gas_limit: CONSTANTS.OPERATIONS.REVEAL.GAS_LIMIT.DEFAULT,
                 storage_limit: 0,
                 public_key: publicKey,
             }
@@ -74,24 +75,36 @@ class Wallet {
             contents.push(reveal)
         }
         contents.push(transaction);
-        const forgedHex = await LocalForger.localForger.forge({branch, contents});
+        const forgedHex = await LocalForger.localForger.forge({branch: hash, contents});
         const signed = await signer.sign(forgedHex, new Uint8Array([3]));
         return signed.sbytes;
     }
 
+    /**
+     *
+     * @param opts
+     * @param opts.from
+     * @param opts.to
+     * @param opts.amount
+     * @param [opts.counter]
+     * @param [opts.fees]
+     * @returns {Promise<{amount: string, gas_limit: {DEFAULT: number}, storage_limit: {DEFAULT: number}, kind: string, fee: string, destination, counter: string, source}>}
+     */
     async buildTransaction(opts = {}){
-        const {from, to, amount, counter, fees} = opts;
+        const {from, to, amount} = opts;
+        const counter = (opts.counter !== undefined) ? opts.counter : (await this.explorer.getNonce(from)).result;
+        const fees = (opts.fees !== undefined) ? opts.fees : this.explorer.getFee().normal;
         const transaction = {
             kind: 'transaction',
             counter: String(counter + 1),
             source: from,
             // Tez to Mutez
-            fee: String(fees*1e6),
-            gas_limit: CONSTANTS.TRANSACTIONS.GAS_LIMIT,
-            storage_limit: CONSTANTS.TRANSACTIONS.STORAGE_LIMIT,
+            fee: String(tezToMutez(fees)),
+            gas_limit: CONSTANTS.TRANSACTIONS.GAS_LIMIT.DEFAULT.toString(),
+            storage_limit: CONSTANTS.TRANSACTIONS.STORAGE_LIMIT.DEFAULT.toString(),
             destination: to,
             // Tez to Mutez
-            amount: String(amount*1e6),
+            amount: String(tezToMutez(amount)),
         };
         return transaction
     }

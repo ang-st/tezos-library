@@ -10,7 +10,7 @@ class ExplorerAPI {
     getBlockHead(){
         return this.client.get('/block/head')
             .then((res)=> {
-                return res.data;
+                return res.data.hash;
             });
     }
     getFee(){
@@ -24,9 +24,11 @@ class ExplorerAPI {
         }
     }
     async isAddressRevealed(address){
-            return this.client().get(`/account/${address}`)
+            return this.client.get(`/account/${address}`)
                 .then(response => {
                     return response.data.is_revealed
+                }).catch(()=>{
+                    return false;
                 })
     }
     async getBalance(address, contractAddress){
