@@ -1,4 +1,5 @@
 const ExplorerAPI = require('../ExplorerAPI/ExplorerAPI');
+const RPCClient = require('../RPCClient/RPCClient');
 const Signer = require('@taquito/signer');
 const LocalForging = require('@taquito/local-forging');
 const LocalForger = require("@taquito/local-forging");
@@ -24,6 +25,7 @@ class Wallet {
 
         this.seed = seed;
         this.explorer = new ExplorerAPI();
+        this.rpc = new RPCClient();
     }
     generateMnemonic(){
         const mnemonic = bip39.generateMnemonic();
@@ -78,6 +80,9 @@ class Wallet {
         const forgedHex = await LocalForger.localForger.forge({branch: hash, contents});
         const signed = await signer.sign(forgedHex, new Uint8Array([3]));
         return signed.sbytes;
+    }
+    async broadcastOperation(signedOperation){
+        return this.rpc.injectOperation(signedOperation);
     }
 
     /**
