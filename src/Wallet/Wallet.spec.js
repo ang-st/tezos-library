@@ -53,9 +53,9 @@ describe('Wallet', function suite() {
         it('should derivate tz2', async function () {
             const {path, address, privateKey, publicKey} = await soundErrorWalletTZ2.derivePath(`m/0`);
             expect(path).to.equal(`m/44'/1729'/0'/0'/0`)
-            expect(address).to.equal('tz2RHWAPctnUcoTLqPKng2pGWwkNrHnZKS9R')
-            expect(privateKey).to.equal('spsk3FcgNbart2FUMRVS8HPpKcrQJL5PXET6jp8GAVHDHGmehnSuRG')
-            expect(publicKey).to.equal('sppk7bEAaeBoQKrkhZTjNUQAjh3B6MfRxmCTLd3g8YNEW2oeD52khcY')
+            expect(address).to.equal('tz2MpVn6hViurszSAhsAPv3sdFFwd6twwNf1')
+            expect(privateKey).to.equal('spsk3LsZGKVLN4J2ECSZmoo9y1s7yuAjUU5V4Mk52wzRLQSFzyA9sN')
+            expect(publicKey).to.equal('sppk7ZPwbNA7tjh1AUuMKiiNvLmQLBXcbevhZGGJgCDRHG286vhG34W')
         });
     })
     describe('Wallet - build transaction', function () {
@@ -87,7 +87,7 @@ describe('Wallet', function suite() {
             });
             expect(transactiontz2.kind).to.equal('transaction');
             expect(parseInt(transactiontz2.counter)).to.be.greaterThan(65028274);
-            expect(transactiontz2.source).to.equal('tz2RHWAPctnUcoTLqPKng2pGWwkNrHnZKS9R');
+            expect(transactiontz2.source).to.equal('tz29zPVZLj51ufwg7hTqvoMku314PevAkNHK');
             expect(transactiontz2.fee).to.equal('1350');
             expect(transactiontz2.gas_limit).to.equal('10600');
             expect(transactiontz2.storage_limit).to.equal('496');
@@ -116,7 +116,7 @@ describe('Wallet', function suite() {
                 // Required to have deterministic sig for our unit test.
                 hash: 'BLchfh6HRBjEYGuWUGytKAiyxhKmjczascntdUym8XyygBU6Tvv'
             });
-            expect(signedTxTZ2).to.equal('7706625a003abb94de0ebad8a65e09f9c0fcc24ccd7e41646a9b8355f3724a9c6b01ba263ef56d3116a197d613933e285873f933e103f609b281811fcc08000102fd3def8339676c6a222b5af24f0f5e06776c606ca52535da015a633d9cc6c4256c01ba263ef56d3116a197d613933e285873f933e103c60ab381811fe852f00387ad4b00003e13f3ab120fb5e538efb22a32d3878758590941007e1822ebdf7ab2277f25f0fa731ba851b06da93d735b8874c772f19436315af3574f49ab1b61cea644524a2fa4c1749ef34bb74598419a597c061e3300a6ae42')
+            expect(signedTxTZ2).to.equal('7706625a003abb94de0ebad8a65e09f9c0fcc24ccd7e41646a9b8355f3724a9c6b01125fb86b49662a1d739822c5a181b3807d439db6f609b281811fcc08000103e0e3b28fd4bf39991f875b14bf021549423a4905f73c7b55b97f53d4f5217be46c01125fb86b49662a1d739822c5a181b3807d439db6c60ab381811fe852f00387ad4b00003e13f3ab120fb5e538efb22a32d387875859094100fcce2ac130b8528b76a358ef8bcc5753be061a41421768547f6739e917c83f6a058bb9294697f605303c50389e7b9974c4b10c412d9366eb1d5e7a10f8bb29a1')
         });
     })
 });
