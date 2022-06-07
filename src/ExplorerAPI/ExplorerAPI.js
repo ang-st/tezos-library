@@ -31,6 +31,10 @@ class ExplorerAPI {
                     return false;
                 })
     }
+    async getContractMetadata(contractAddress){
+        return await this.client.get(`/account/${contractAddress}?meta=1`)
+    }
+
     async getBalance(address, contractAddress){
         if(!contractAddress){
             return this.client.get(`/account/${address}`)
@@ -39,7 +43,10 @@ class ExplorerAPI {
                 })
         }
         const getContractResponse = await this.client.get(`/contract/${contractAddress}`)
-        //TODO: get Decimals at this point.
+
+        const getContractMetadata = await this.getContractMetadata(contractAddress);
+        const {decimals} = getContractMetadata.data.metadata[contractAddress].asset;
+
         if (!getContractResponse.data || !getContractResponse.data.bigmaps) {
             return new Error(`Unable to find ledger information for contract ${contractAddress}`)
         }
@@ -55,7 +62,7 @@ class ExplorerAPI {
         }
 
         const ledgerBigMapId = getContractResponse.data.bigmaps[balanceBigMapKeyName]
-        const ledgerResponse = await this.explorer.get(`/bigmap/${ledgerBigMapId}/values`)
+        const ledgerResponse = await this.client.get(`/bigmap/${ledgerBigMapId}/values`)
         const filteredLedger = ledgerResponse.data.filter((e) => e.key['0'] === address)
         // What if there is .balance ?
         const balance = filteredLedger.length === 0 ? 0 : filteredLedger[0].value;
