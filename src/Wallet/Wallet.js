@@ -13,7 +13,7 @@ const TYPED_WALLET = {
 
 class Wallet {
     constructor(opts = {}) {
-        this.type = opts?.type?.toLowerCase() || 'tz1';
+        this.type = opts.type || 'tz1';
         if(!['tz1','tz2'].includes(this.type)){
             throw new Error('Support limited to TZ1/TZ2');
         }
@@ -43,7 +43,7 @@ class Wallet {
         }
 
         const typedWallet = new TYPED_WALLET[this.type](this.seed);
-        const derivationPath = `${rootPath}/${path.replaceAll('m/', '')}`;
+        const derivationPath = `${rootPath}/${path.replace('m/', '')}`;
         const privateKeyFromSeed = typedWallet.derivePath(derivationPath);
         const keySet = await Signer.InMemorySigner.fromSecretKey(privateKeyFromSeed);
         const [publicKey, address, privateKey] = await Promise.all([keySet.publicKey(), keySet.publicKeyHash(), keySet.secretKey()]);
