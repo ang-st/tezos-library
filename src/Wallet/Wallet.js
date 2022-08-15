@@ -18,6 +18,10 @@ class Wallet {
             throw new Error('Support limited to TZ1/TZ2');
         }
 
+        this.rootPath = "m/44'/1729'/0'/0'"
+        if(opts.rootPath){
+            this.rootPath = opts.rootPath;
+        }
         const password = (opts.password) ? opts.password : '';
         const mnemonic = (opts.mnemonic) ? opts.mnemonic : this.generateMnemonic();
 
@@ -35,15 +39,10 @@ class Wallet {
         }
         return mnemonic;
     }
-    async derivePath(path, opts = {}){
+    async derivePath(path){
         // Path for Tezos (templeos, conseiljs,...)
-        let rootPath = "m/44'/1729'/0'/0'"
-        if(opts.rootPath){
-            rootPath = opts.rootPath;
-        }
-
         const typedWallet = new TYPED_WALLET[this.type](this.seed);
-        const derivationPath = `${rootPath}/${path.replace('m/', '')}`;
+        const derivationPath = `${this.rootPath}/${path.replace('m/', '')}`;
         const privateKeyFromSeed = typedWallet.derivePath(derivationPath);
         const keySet = await Signer.InMemorySigner.fromSecretKey(privateKeyFromSeed);
         const [publicKey, address, privateKey] = await Promise.all([keySet.publicKey(), keySet.publicKeyHash(), keySet.secretKey()]);
