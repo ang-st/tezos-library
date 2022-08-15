@@ -10,7 +10,7 @@ class RPCClient {
         this.client.post('/injection/operation', data, {
             headers: {
                 "Cache-Control":  "no-cache",
-                "Content-Type": "application/json",
+                "Content-Type": "application/octet-stream",
             }
         });
 
