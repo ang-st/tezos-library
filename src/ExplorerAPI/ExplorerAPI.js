@@ -4,7 +4,7 @@ const networks = require('../utils/networks')
 
 class ExplorerAPI {
     constructor(opts = {}) {
-        if (!networks.list).includes(opts.network){
+        if (!networks.list.includes(opts.network)){
             this.client = axios.create({ baseURL: networks.conf[opts.networks].base })
             // Used as replacement for first explorer when fetching counter.
             this.alternativeClient = axios.create({ baseURL: networks.conf[opts.networks].alt })

@@ -19,7 +19,7 @@ class Wallet {
         if(!['tz1','tz2'].includes(this.type)){
             throw new Error('Support limited to TZ1/TZ2');
         }
-        if(!networks.list).includes(this.network){
+        if(!networks.list.includes(this.network)){
             throw new Error(`Support limited to ${networks.list.toString()}`);
 
         }
