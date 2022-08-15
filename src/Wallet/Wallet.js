@@ -5,6 +5,7 @@ const LocalForging = require('@taquito/local-forging');
 const LocalForger = require("@taquito/local-forging");
 const bip39 = require("bip39");
 const tezToMutez = require('../utils/tezToMutez');
+const networks = require('../utils/networks');
 const CONSTANTS = require('../CONSTANTS');
 const TYPED_WALLET = {
     'tz1': require('./TZ1Wallet/TZ1Wallet'),
@@ -14,10 +15,15 @@ const TYPED_WALLET = {
 class Wallet {
     constructor(opts = {}) {
         this.type = opts.type || 'tz1';
+        this.network = opts.network || 'mainnet';
         if(!['tz1','tz2'].includes(this.type)){
             throw new Error('Support limited to TZ1/TZ2');
         }
+        if(!networks.list).includes(this.network){
+            throw new Error(`Support limited to ${networks.list.toString()}`);
 
+        }
+        // Path for Tezos (templeos, conseiljs,...)
         this.rootPath = "m/44'/1729'/0'/0'"
         if(opts.rootPath){
             this.rootPath = opts.rootPath;
@@ -28,8 +34,8 @@ class Wallet {
         const seed = (opts.seed) ? opts.seed : bip39.mnemonicToSeedSync(mnemonic, password)
 
         this.seed = seed;
-        this.explorer = new ExplorerAPI();
-        this.rpc = new RPCClient();
+        this.explorer = new ExplorerAPI(this.network);
+        this.rpc = new RPCClient(this.network);
     }
     generateMnemonic(){
         const mnemonic = bip39.generateMnemonic();
@@ -40,7 +46,6 @@ class Wallet {
         return mnemonic;
     }
     async derivePath(path){
-        // Path for Tezos (templeos, conseiljs,...)
         const typedWallet = new TYPED_WALLET[this.type](this.seed);
         const derivationPath = `${this.rootPath}/${path.replace('m/', '')}`;
         const privateKeyFromSeed = typedWallet.derivePath(derivationPath);

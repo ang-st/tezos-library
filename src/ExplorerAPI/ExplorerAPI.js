@@ -1,10 +1,17 @@
 const axios = require('axios');
 const decodeAmount = require('../utils/decodeAmount');
+const networks = require('../utils/networks')
+
 class ExplorerAPI {
-    constructor(){
-        this.client = axios.create({ baseURL: `https://api.tzstats.com/explorer` })
-        // Used as replacement for first explorer when fetching counter.
-        this.alternativeClient = axios.create({ baseURL: `https://api.tzkt.io/v1/` })
+    constructor(opts = {}) {
+        if (!networks.list).includes(opts.network){
+            this.client = axios.create({ baseURL: networks.conf[opts.networks].base })
+            // Used as replacement for first explorer when fetching counter.
+            this.alternativeClient = axios.create({ baseURL: networks.conf[opts.networks].alt })
+        } else {
+            this.client = axios.create({ baseURL: networks.mainnet.base })
+            this.alternativeClient = axios.create({ baseURL: networks.mainnet.alt })
+        }
     }
 
     getBlockHead(){

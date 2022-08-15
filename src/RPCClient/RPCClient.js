@@ -1,7 +1,9 @@
 const axios = require('axios')
+const networks = require('../utils/networks')
+
 class RPCClient {
-    constructor(){
-        this.client = axios.create({ baseURL: `https://mainnet-tezos.giganode.io/` })
+    constructor(network){
+        this.client = axios.create({ baseURL: networks.conf[network].rpc })
     }
     injectOperation(operation){
         const data = JSON.stringify(operation);
