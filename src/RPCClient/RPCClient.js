@@ -7,7 +7,7 @@ class RPCClient {
     }
     async injectOperation(operation){
         const data = JSON.stringify(operation);
-        this.client.post('/injection/operation', data, {
+        return this.client.post('/injection/operation', data, {
             headers: {
                 "Cache-Control":  "no-cache",
                 "Content-Type": "application/octet-stream",
