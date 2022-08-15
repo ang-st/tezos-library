@@ -5,7 +5,7 @@ class RPCClient {
     constructor(network){
         this.client = axios.create({ baseURL: networks.conf[network].rpc })
     }
-    injectOperation(operation){
+    async injectOperation(operation){
         const data = JSON.stringify(operation);
         this.client.post('/injection/operation', data, {
             headers: {
