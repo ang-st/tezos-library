@@ -6,7 +6,7 @@ class ExplorerAPI {
     constructor(networkid) {
         const network = networkid || 'mainnet'
         this.client = axios.create({ baseURL: networks.conf[network].base })
-        this.alternativeClient = axios.create({ baseURL: networks.conf[opts.networks].alt })
+        this.alternativeClient = axios.create({ baseURL: networks.conf[network].alt })
     }
 
     getBlockHead(){
