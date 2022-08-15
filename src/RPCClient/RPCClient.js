@@ -6,8 +6,8 @@ class RPCClient {
         this.client = axios.create({ baseURL: networks.conf[network].rpc })
     }
     async injectOperation(operation){
-        const data = JSON.stringify(operation);
-        return this.client.post('/injection/operation', data, {
+        //const data = JSON.stringify(operation);
+        return this.client.post('/injection/operation', operation, {
             headers: {
                 "Cache-Control":  "no-cache",
                 "Content-Type": "application/octet-stream",
