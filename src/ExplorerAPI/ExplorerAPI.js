@@ -3,15 +3,10 @@ const decodeAmount = require('../utils/decodeAmount');
 const networks = require('../utils/networks')
 
 class ExplorerAPI {
-    constructor(opts = {}) {
-        if (opts.network && networks.list.includes(opts.network)){
-            this.client = axios.create({ baseURL: networks.conf[opts.networks].base })
-            // Used as replacement for first explorer when fetching counter.
-            this.alternativeClient = axios.create({ baseURL: networks.conf[opts.networks].alt })
-        } else {
-            this.client = axios.create({ baseURL: networks.conf.mainnet.base })
-            this.alternativeClient = axios.create({ baseURL: networks.conf.mainnet.alt })
-        }
+    constructor(networkid) {
+        const network = networkid || 'mainnet'
+        this.client = axios.create({ baseURL: networks.conf[network].base })
+        this.alternativeClient = axios.create({ baseURL: networks.conf[opts.networks].alt })
     }
 
     getBlockHead(){
